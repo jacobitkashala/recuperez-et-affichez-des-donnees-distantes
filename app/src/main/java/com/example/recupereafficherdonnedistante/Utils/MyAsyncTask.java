@@ -41,7 +41,4 @@ public class MyAsyncTask extends AsyncTask<Void, Void, Long> {
         Log.e("TAG", "AsyncTask is finished.");
     }
 
-
-
-
 }
