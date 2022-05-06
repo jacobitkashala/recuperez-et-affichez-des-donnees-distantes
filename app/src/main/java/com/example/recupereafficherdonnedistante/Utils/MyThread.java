@@ -2,6 +2,7 @@ package com.example.recupereafficherdonnedistante.Utils;
 
 public class MyThread extends  Thread{
     private  Utils utils;
+
     @Override
     public void run() {
         super.run();

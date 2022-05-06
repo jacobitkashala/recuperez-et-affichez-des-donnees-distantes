@@ -29,10 +29,25 @@ public class MyHandleThread extends HandlerThread {
         if (!this.isAlive()) this.start();
 
         // Creating a new Handler and setting it the looper of handlerThread
-        // Handler handler = new Handler(this.getLooper());
+       /*  Handler handler = new Handler() {
+             @Override
+             public void publish(LogRecord record) {
+
+             }
+
+             @Override
+             public void flush() {
+
+             }
+
+             @Override
+             public void close() throws SecurityException {
+
+             }
+         };*/
 
         // Executing a new Runnable
-        /*
+       /*
         handler.post(new Runnable(){
             @Override
             public void run() {
