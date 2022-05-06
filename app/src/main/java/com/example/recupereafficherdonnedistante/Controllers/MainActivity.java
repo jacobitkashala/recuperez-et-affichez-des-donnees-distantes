@@ -1,6 +1,10 @@
 package com.example.recupereafficherdonnedistante.Controllers;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +14,13 @@ import android.widget.Toast;
 
 import com.example.recupereafficherdonnedistante.R;
 import com.example.recupereafficherdonnedistante.Utils.MyAsyncTask;
+import com.example.recupereafficherdonnedistante.Utils.MyAsyncTaskLoader;
 import com.example.recupereafficherdonnedistante.Utils.Utils;
 
-public class MainActivity extends AppCompatActivity implements MyAsyncTask.Listeners {
+public class MainActivity extends AppCompatActivity implements MyAsyncTask.Listeners , LoaderManager.LoaderCallbacks<Long> {
     // private TextView mTextView;
     private ProgressBar progressBar,progressBarCercle;
+    private  static int TASK_ID = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements MyAsyncTask.Liste
         // mTextView= findViewById(R.id.activity_main_text_view);
 
         progressBarCercle.setVisibility(View.GONE);
+
+        //Try to resume possible loading AsyncTask
+        this.resumeAsyncTaskLoaderIfPossible();
 
     }
 
@@ -58,11 +67,19 @@ public class MainActivity extends AppCompatActivity implements MyAsyncTask.Liste
                   this.startAsyncTask();
                 break;
             case 70: // CASE USER CLICKED ON BUTTON "EXECUTE ASYNCTASKLOADER"
-                // this.startAsyncTaskLoader();
+                this.startAsyncTaskLoader();
                 break;
         }
     }
-
+    private void startAsyncTaskLoader(){
+        getSupportLoaderManager().restartLoader(TASK_ID,null,this);
+    }
+    private void resumeAsyncTaskLoaderIfPossible(){
+        if (getSupportLoaderManager().getLoader(TASK_ID) != null && getSupportLoaderManager().getLoader(TASK_ID).isStarted()) {
+            getSupportLoaderManager().initLoader(TASK_ID, null, this);
+            this.updateUiBeforTask();
+        }
+    }
 
     @Override
     public void onPreExecute() {
@@ -89,5 +106,23 @@ public class MainActivity extends AppCompatActivity implements MyAsyncTask.Liste
     public void updateUiAfterTask(Long taskEnd){
         progressBarCercle.setVisibility(View.GONE);
         Toast.makeText(this,"La tache a pris fin"+taskEnd+".",Toast.LENGTH_SHORT).show();
+    }
+
+    @NonNull
+    @Override
+    public Loader<Long> onCreateLoader(int id, @Nullable Bundle args) {
+        this.updateUiBeforTask();
+        return new MyAsyncTaskLoader(this);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Long> loader, Long data) {
+        this.updateUiAfterTask(data);
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Long> loader) {
+
     }
 }
