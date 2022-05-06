@@ -45,6 +45,13 @@
             android:layout_height="50dip"
             android:visibility="gone"/>
 
+        <TextView
+            android:id="@+id/activity_main_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Bienvenue"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
     </LinearLayout>
 
     <LinearLayout
